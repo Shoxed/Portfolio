@@ -2,6 +2,30 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+class Portfolio(models.Model):
+    title = models.CharField(max_length=200)
+    contact_email=models.CharField(max_length=200)
+    is_active = models.BooleanField(default = False)
+    about = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+   
+    def get_absolute_url(self):
+        return reverse('portfolio-detail', args=[str(self.id)])
+
+class Project(models.Model):
+    title = models.CharField(max_length = 200)
+    description = models.TextField()
+    portfolio = models.OneToOneField(Portfolio, on_delete=models.CASCADE, unique=True, default=None)
+    
+    def __str__(self):
+        return self.title
+   
+    def get_absolute_url(self):
+        return reverse('project-detail', args=[str(self.id)])
+
+
 class Student(models.Model):
 #List of choices for major value in database, human readable name
     MAJOR = (
@@ -17,6 +41,7 @@ class Student(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField("UCCS Email", max_length=200)
     major = models.CharField(max_length=200, choices=MAJOR)
+    portfolio = models.OneToOneField(Portfolio, on_delete=models.CASCADE, unique=True, default=None)
     #Define default String to return the name for representing the Model object."
     def __str__(self):
         return self.name
