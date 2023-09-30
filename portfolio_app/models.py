@@ -17,7 +17,7 @@ class Portfolio(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length = 200)
     description = models.TextField()
-    portfolio = models.OneToOneField(Portfolio, on_delete=models.CASCADE, unique=True, default=None)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, default = None)
     
     def __str__(self):
         return self.title
@@ -50,3 +50,15 @@ class Student(models.Model):
     #add a "View on Site" button to the model's record editing screens in the Admin site
     def get_absolute_url(self):
         return reverse('student-detail', args=[str(self.id)])
+    
+
+class ProjectsInPortfolio(models.Model):
+    #deleting a portfolio will delete associate projects
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    #deleting a project will not affect the portfolio
+    #Just the entry will be removed from this table
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    
+    class Meta:
+        #ensures that each project is associated with only one portfolio
+        unique_together = ('portfolio', 'project')
