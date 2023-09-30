@@ -12,6 +12,7 @@ class Student(models.Model):
             ('CSCI-BA', 'BA in Computer Science'),
             ('DASE-BS', 'BS in Data Analytics and Systems Engineering')
             )
+    
     name = models.CharField(max_length=200)
     email = models.CharField("UCCS Email", max_length=200)
     major = models.CharField(max_length=200, choices=MAJOR, blank = True)
