@@ -20,9 +20,15 @@ class PortfolioListView(generic.ListView):
 
 class PortfolioDetailView(generic.DetailView):
     model = Portfolio
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        portfolio_id = self.object.id # adds the current portfolio id to new variable
+        context['projects'] = Project.objects.filter(portfolio_id=portfolio_id) # sorts through all projects and sends only those associated with current portfolio
+        return context
+    
 class ProjectListView(generic.ListView):
     model = Project
+
 
 class ProjectDetailView(generic.DetailView):
     model = Project
