@@ -11,7 +11,7 @@
 <ul class="list-group">
 {% for i in student_active_portfolios %}
 <li class="list-group-item">Name: {{i.name}}
-<p><strong>Portfolio:{{ i.portfolio.title }}
+<p><strong>Portfolio:{{ i.portfolio.title }}</p>
 <a class="btn btn-primary" href="{{ i.portfolio.get_absolute_url }}" role="button">View</a>
 </li>
 {% endfor %}

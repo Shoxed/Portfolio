@@ -21,6 +21,12 @@ class PortfolioListView(generic.ListView):
 class PortfolioDetailView(generic.DetailView):
     model = Portfolio
 
+class ProjectListView(generic.ListView):
+    model = Project
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+
 
 def index(request):
     student_active_portfolios = Student.objects.select_related('portfolio').all().filter(portfolio__is_active=True)
