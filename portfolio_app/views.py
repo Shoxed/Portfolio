@@ -30,20 +30,18 @@ class PortfolioDetailView(generic.DetailView):
         return context
 
 #Portfolio Functions
-def updatePortfolio(request, pk):
+def updatePortfolio(request, portfolio_id):
   # Adds portfolio record/object into new variable
-  portfolio = get_object_or_404(Portfolio, pk=pk) 
-  
+  portfolio = Portfolio.objects.get(pk = portfolio_id) 
+  form = PortfolioForm(instance = portfolio) 
+
   if request.method == 'POST':
-    portfolio_data = request.post.copy() # Copies the changes from POST reuest made by client 
-    form = PortfolioForm(portfolio_data, instance = portfolio) # Saves changes to form 
+    form = PortfolioForm(request.POST) # Saves changes to form 
     if form.is_valid():
       form.save()
-      return redirect('portfolio-detail', pk=pk) # Redirects user back to portfolio-detail after request has been completed
-  else:
-    form = PortfolioForm(instance=portfolio)
+      return redirect('portfolio-detail', pk=portfolio_id) # Redirects user back to portfolio-detail after request has been completed
     
-  context={'form': form,'portfolio': portfolio, }
+  context={'form': form,'portfolio': portfolio }
   return render(request, 'portfolio_app/portfolio_update.html', context)
 
 #Project Views
@@ -79,9 +77,10 @@ def createProject(request, portfolio_id):
     return render(request, 'portfolio_app/project_form.html', context)
 
 #Project Functions 
-def deleteProject(request, pk):
+def deleteProject(request, portfolio_id, project_id):
     # Add project record/object into new variable
-    project = get_object_or_404(Project, pk=pk)
+    project = Project.objects.get(pk=project_id)
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
 
     if request.method == 'POST':
         project.delete() # Delete project
@@ -90,19 +89,18 @@ def deleteProject(request, pk):
     context = {'project': project}
     return render(request, 'portfolio_app/project_delete.html', context)
 
-def updateProject(request, pk):
-  project = get_object_or_404(Project, pk=pk)
+def updateProject(request, portfolio_id, project_id):
+  project = Project.objects.get(pk=project_id)
+  portfolio = Portfolio.objects.get(pk=portfolio_id)
   if request.method == 'POST':
-    project_data = request.POST.copy() # Requests copy of changes from POST reuqest made by client 
-    form = ProjectForm(project_data, instance = project) # Saves changes to form 
+    form = ProjectForm(request.POST, instance = project)
     if form.is_valid():
-      form.save() # saves updated form 
-      return redirect('project-detail', pk=pk) # Returns to project-detail page if changes were successfull 
+      form.save()
+      return redirect('project-detail', pk=project_id)
   else:
-    form = ProjectForm(instance=project) # reverts project back to inital state 
-   
-    context={'form': form, 'project': project,}
-    return render(request, 'portfolio_app/project_update.html', context)
+    form = ProjectForm(instance=project)
+    context={'form': form, 'portfolio': portfolio, 'project': project}
+  return render(request, 'portfolio_app/project_update.html', context)
   
 #Index Fucntion
 def index(request):

@@ -8,6 +8,6 @@
 <p><strong>Email:</strong> {{ student.email }}</p>
 <p><strong>Major:</strong> {{ student.major }}</p>
 <p><strong>Portfolio:<a href="{{ student.portfolio.get_absolute_url }}">{{ student.portfolio.title }} </a></p>
-<a class="btn btn-primary" href="{% url 'update-portfolio' pk=student.portfolio.id %}" role="button">Update</a>
+<a class="btn btn-primary" href="{% url 'update-portfolio' portfolio_id=student.portfolio.id %}" role="button">Update</a>
 
 {% endblock %}
