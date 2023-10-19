@@ -1,2 +1,2 @@
 # Portfolio
-Portfolio of Programming Projects from JD Hickey
+Portfolio web app in Django
