@@ -34,14 +34,13 @@ def updatePortfolio(request, portfolio_id):
   # Adds portfolio record/object into new variable
   portfolio = Portfolio.objects.get(pk = portfolio_id) 
   form = PortfolioForm(instance = portfolio) 
-
   if request.method == 'POST':
-    form = PortfolioForm(request.POST) # Saves changes to form 
-    if form.is_valid():
-      form.save()
-      return redirect('portfolio-detail', pk=portfolio_id) # Redirects user back to portfolio-detail after request has been completed
-    
-  context={'form': form,'portfolio': portfolio }
+        form = PortfolioForm(request.POST, instance = portfolio)
+        if form.is_valid():
+         form.save()
+         return redirect('portfolio-detail', pk=portfolio.id)
+        
+  context={'form': form,'portfolio': portfolio}
   return render(request, 'portfolio_app/portfolio_update.html', context)
 
 #Project Views
@@ -84,7 +83,7 @@ def deleteProject(request, portfolio_id, project_id):
 
     if request.method == 'POST':
         project.delete() # Delete project
-        return redirect('portfolio-detail', pk=project.portfolio.id) # Redirect user back to portfolio-detail page
+        return redirect('portfolio-detail', pk=portfolio.id) # Redirect user back to portfolio-detail page
     
     context = {'project': project}
     return render(request, 'portfolio_app/project_delete.html', context)
@@ -92,14 +91,15 @@ def deleteProject(request, portfolio_id, project_id):
 def updateProject(request, portfolio_id, project_id):
   project = Project.objects.get(pk=project_id)
   portfolio = Portfolio.objects.get(pk=portfolio_id)
+  form = ProjectForm(instance=project)
+  
   if request.method == 'POST':
     form = ProjectForm(request.POST, instance = project)
     if form.is_valid():
       form.save()
-      return redirect('project-detail', pk=project_id)
-  else:
-    form = ProjectForm(instance=project)
-    context={'form': form, 'portfolio': portfolio, 'project': project}
+      return redirect('portfolio-detail', pk=portfolio.id)
+
+  context={'form': form, 'portfolio': portfolio, 'project': project}
   return render(request, 'portfolio_app/project_update.html', context)
   
 #Index Fucntion

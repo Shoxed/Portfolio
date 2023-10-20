@@ -13,6 +13,7 @@
     <strong>Contact Email:</strong> {{ portfolio.student.email }}
   </p>
   <p><strong>Projects:</strong></p>
+  <a class="btn btn-primary" href="{% url 'create-project' portfolio.id %}" role="button">New</a>
   <ul>
     {% for project in projects %}
       <li>
