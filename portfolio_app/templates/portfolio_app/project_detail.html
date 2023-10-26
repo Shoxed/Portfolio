@@ -1,10 +1,9 @@
 {% extends 'portfolio_app/base_template.html' %}
 
 {% block content %}
-  <h1>{{ project.title }}</h1>
+  <h1>Project Title: {{ project.title }}</h1>
 
-  <p>
-    <strong>Project Description:</strong>
-  </p>
-  <p>{{ project.description }}</p>
+  <p><strong>Description:</strong> {{ project.description }}</p>
+  <p><strong>Portfolio:</strong> <a href="{{ project.portfolio.get_absolute_url }}">{{ project.portfolio }} </a></p>
+  <a href="{% url 'portfolio-detail' pk=project.portfolio.id %}" class="btn btn-primary">Go Back</a>
 {% endblock %}

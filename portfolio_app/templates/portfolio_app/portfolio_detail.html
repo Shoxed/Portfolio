@@ -1,27 +1,36 @@
 {% extends 'portfolio_app/base_template.html' %}
 
 {% block content %}
-  <h1>Portfolio Title: {{ portfolio.title }}</h1>
+<!-- CSS Styles -->
+<style>
+  /* Defining a mouseover effect so the user can see the card they are interacting with easier*/
+  .hover-card:hover {
+    background-color: #f5f5f5;
+  }
+</style>
 
-  <p>
-    <strong>Portfolio Active:</strong> {{ portfolio.is_active }}
-  </p>
-  <p>
-    <strong>About:</strong> {{ portfolio.student.name }}
-  </p>
-  <p>
-    <strong>Contact Email:</strong> {{ portfolio.student.email }}
-  </p>
-  <p><strong>Projects:</strong></p>
-  <a class="btn btn-primary" href="{% url 'create-project' portfolio.id %}" role="button">New</a>
-  <ul>
+  <h1>{{ portfolio.title }}: {{ portfolio.student.name }} portfolio</h1>
+
+  <p><strong>Portfolio Active:</strong> {{ portfolio.is_active }}</p>
+  <p><strong>About:</strong> {{ portfolio.about }}</p>
+  <p><strong>Contact Email:</strong> {{ portfolio.student.email }}</p>
+  <!-- <a class="btn btn-primary" href="{% url 'update-portfolio' portfolio_id=portfolio.id %}" role="button">Update Portfolio</a> -->
+
+  <h3>Project List:</h3>
+  <a class="btn btn-primary" href="{% url 'create_project' portfolio.id %}" role="button">New</a>
+  {% if projects %}
     {% for project in projects %}
-      <li>
-        {{ project.title }}
-        <a class="btn btn-primary" href="{{ project.get_absolute_url }}" role="button">View</a>
-        <a class="btn btn-primary" href="{% url 'delete-project' portfolio_id=portfolio.id project_id=project.id %}" role="button">Delete</a>
-        <a class="btn btn-primary" href="{% url 'update-project' portfolio_id=portfolio.id project_id=project.id %}" role="button">Update</a>
-      </li>
+    <div class="card hover-card">
+      <div class="card-body">
+        <h5 class="card-title">{{ project.title }}</h5>
+        <a href="{{ project.get_absolute_url }}" class="btn btn-primary">View</a>
+        <a href="{% url 'update-project' portfolio_id=portfolio.id project_id=project.id %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'delete-project' portfolio_id=portfolio.id project_id=project.id %}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
     {% endfor %}
-  </ul>
+  {% else %}
+  <p>There are no projects.</p>
+  {% endif %}
+</div>
 {% endblock %}
